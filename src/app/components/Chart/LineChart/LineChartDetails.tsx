@@ -4,6 +4,10 @@ import type { MultiLineDataType } from "./sharedTypes";
 import { useResizableRef } from "@/app/hooks";
 import type { DetailChartProps, Padding } from "../sharedTypes";
 import { BrushSelection } from "d3";
+import {
+  debouncedDrawLineChartDetails,
+  drawLineChartDetails,
+} from "./drawLineChart/drawLineChartDetails";
 
 interface LineChartDetailsProps extends DetailChartProps {
   data: MultiLineDataType;
@@ -23,9 +27,24 @@ export const LineChartDetails: FC<LineChartDetailsProps> = ({
   const [brushUpdate, setBrushUpdate] =
     useState<(brush: BrushSelection) => void>();
 
-  useEffect(() => {}, [size]);
+  useEffect(() => {
+    const onSizeChange = setTimeout(() => {
+      const updateLineChart = drawLineChartDetails(
+        containerRef.current,
+        data,
+        size,
+        padding
+      );
+      setBrushUpdate(() => updateLineChart?.onBrush);
+    }, 500);
+
+    return () => clearTimeout(onSizeChange);
+  }, [size]);
 
   useEffect(() => {
+    if (!brush) {
+      return;
+    }
     brushUpdate?.(brush);
   }, [brush, brushUpdate]);
 

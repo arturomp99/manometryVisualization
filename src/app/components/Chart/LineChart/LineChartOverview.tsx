@@ -21,7 +21,13 @@ export const LineChartOverview: FC<LineChartOverviewProps> = ({
 
   useEffect(
     () =>
-      debouncedDrawLineChartOverview(containerRef.current, data, size, padding),
+      debouncedDrawLineChartOverview(
+        containerRef.current,
+        data,
+        size,
+        padding,
+        onBrush
+      ),
     [size]
   );
 

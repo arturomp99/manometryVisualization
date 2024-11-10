@@ -1,12 +1,12 @@
 import { brushX, select } from "d3";
-import type { D3BrushEvent, BrushSelection } from "d3";
-import { Padding, Size } from "../components/Chart/sharedTypes";
+import type { D3BrushEvent } from "d3";
+import { OnBrushType, Padding, Size } from "../components/Chart/sharedTypes";
 
 export const addBrush = (
   svgRef: SVGSVGElement,
   size: Size,
   padding: Padding,
-  onBrush: (brushLimits: BrushSelection | null) => void,
+  onBrush: OnBrushType,
   onBrushEnd: () => void
 ) => {
   const defaultSelection: [number, number] = [0, 0];

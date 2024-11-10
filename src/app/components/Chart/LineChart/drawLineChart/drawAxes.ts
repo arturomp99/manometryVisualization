@@ -1,4 +1,4 @@
-import { axisBottom, axisLeft, select } from "d3";
+import { axisBottom, axisLeft, BrushSelection, select } from "d3";
 import { Padding, Size } from "../../sharedTypes";
 import { getLineChartScales } from "./getLineChartScales";
 
@@ -7,13 +7,15 @@ export const drawAxes = (
   scales: ReturnType<typeof getLineChartScales>,
   dimensions: Size,
   padding: Padding
-) => {
+): ((newXAxisExtent: [number, number]) => {
+  newScales: ReturnType<typeof getLineChartScales>;
+}) => {
   const { xScale, yScale } = scales;
 
   const xAxis = axisBottom(xScale);
   const yAxis = axisLeft(yScale);
 
-  select(parentRef)
+  const xAxisG = select(parentRef)
     .selectAll(".line-chart-x-axis")
     .data([0])
     .enter()
@@ -33,4 +35,14 @@ export const drawAxes = (
     .attr("class", "line-chart-y-axis")
     .call(yAxis)
     .attr("transform", `translate(${padding.x.left}, ${padding.y.top})`);
+
+  const updateAxes = (
+    newXAxisExtent: [number, number]
+  ): { newScales: ReturnType<typeof getLineChartScales> } => {
+    const newXScale = xScale?.domain(newXAxisExtent);
+    xAxisG.call(axisBottom(newXScale));
+    return { newScales: { xScale: newXScale, yScale } };
+  };
+
+  return updateAxes;
 };

@@ -5,11 +5,11 @@ export type ChartProps = {
 };
 
 export type OverviewChartProps = {
-  onBrush: (brush: BrushSelection) => void;
+  onBrush: OnBrushType;
 };
 
 export type DetailChartProps = {
-  brush: BrushSelection;
+  brush: BrushSelection | null | undefined;
 };
 
 export type PartialSize = {
@@ -26,3 +26,5 @@ export type Padding = {
   x: { left: number; right: number };
   y: { top: number; bottom: number };
 };
+
+export type OnBrushType = (brush: BrushSelection | null) => void;
