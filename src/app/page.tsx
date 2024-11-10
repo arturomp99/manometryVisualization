@@ -1,12 +1,10 @@
-import { Chart } from "./components/Chart/Chart";
+import { Charts } from "./components/Chart/Charts";
 import { Kpis } from "./components/Kpis";
-import { SelectChartType } from "./components/SelectChartType";
 
-export default function Home() {
+export default async function Home() {
   return (
-    <div>
-      <SelectChartType />
-      <Chart />
+    <div className="min-h-screen px-4 sm:px-8 lg:px-16 py-4">
+      <Charts />
       <Kpis />
     </div>
   );
