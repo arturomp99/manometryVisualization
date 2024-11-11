@@ -24,22 +24,7 @@ export const drawLineChartOverview = (
   }
   const scales = getLineChartScales(data, size as Size, padding);
   drawLines(parentRef, data, padding, scales);
-  addBrush(
-    parentRef,
-    size as Size,
-    padding,
-    (brush: BrushSelection | null) => {
-      if (!brush) {
-        return;
-      }
-      const brushSelection: [number, number] = [
-        scales.xScale.invert(brush[0] as number),
-        scales.xScale.invert(brush[1] as number),
-      ];
-      onBrush(brushSelection);
-    },
-    () => console.log("arturo brush end")
-  );
+  addBrush(parentRef, scales.xScale, size as Size, padding, onBrush);
   drawAxes(parentRef, scales, size as Size, padding);
 };
 

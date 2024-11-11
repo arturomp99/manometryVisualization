@@ -25,7 +25,7 @@ export const LineChartDetails: FC<LineChartDetailsProps> = ({
   const { containerRef, size } = useResizableRef<SVGSVGElement>();
 
   const [brushUpdate, setBrushUpdate] =
-    useState<(brush: BrushSelection) => void>();
+    useState<(brush: BrushSelection | null) => void>();
 
   useEffect(() => {
     const onSizeChange = setTimeout(() => {
@@ -42,7 +42,7 @@ export const LineChartDetails: FC<LineChartDetailsProps> = ({
   }, [size]);
 
   useEffect(() => {
-    if (!brush) {
+    if (brush === undefined) {
       return;
     }
     brushUpdate?.(brush);

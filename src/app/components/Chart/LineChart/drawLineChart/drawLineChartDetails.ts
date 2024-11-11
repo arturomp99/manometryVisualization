@@ -5,7 +5,6 @@ import { getLineChartScales } from "./getLineChartScales";
 import { drawLines } from "./drawLines";
 import { drawAxes } from "./drawAxes";
 import { clip } from "@/app/d3Utils";
-import { BrushSelection } from "d3";
 
 export const drawLineChartDetails = (
   parentRef: SVGSVGElement | null,
@@ -18,12 +17,13 @@ export const drawLineChartDetails = (
   }
   const scales = getLineChartScales(data, size as Size, padding);
   const { lines, updateLines } = drawLines(parentRef, data, padding, scales);
+  console.log("arturo lines", lines);
   const updateAxes = drawAxes(parentRef, scales, size as Size, padding);
   clip(parentRef, [lines], size as Size, padding);
 
   const onBrush = (brushSelection: [number, number]) => {
-    const { newScales } = updateAxes(brushSelection);
-    updateLines(newScales);
+    updateAxes(brushSelection);
+    updateLines();
   };
 
   return { onBrush };

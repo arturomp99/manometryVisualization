@@ -11,6 +11,7 @@ export const drawAxes = (
   newScales: ReturnType<typeof getLineChartScales>;
 }) => {
   const { xScale, yScale } = scales;
+  const initialDomain = xScale.domain();
 
   const xAxis = axisBottom(xScale);
   const yAxis = axisLeft(yScale);
@@ -37,9 +38,9 @@ export const drawAxes = (
     .attr("transform", `translate(${padding.x.left}, ${padding.y.top})`);
 
   const updateAxes = (
-    newXAxisExtent: [number, number]
+    newXAxisExtent: [number, number] | null
   ): { newScales: ReturnType<typeof getLineChartScales> } => {
-    const newXScale = xScale?.domain(newXAxisExtent);
+    const newXScale = xScale?.domain(newXAxisExtent ?? initialDomain);
     xAxisG.call(axisBottom(newXScale));
     return { newScales: { xScale: newXScale, yScale } };
   };

@@ -10,7 +10,7 @@ export const drawLines = (
   scales: ReturnType<typeof getLineChartScales>
 ): {
   lines: SVGElement | null;
-  updateLines: (newScales: ReturnType<typeof getLineChartScales>) => void;
+  updateLines: () => void;
 } => {
   const getLineGenerator = (scales: ReturnType<typeof getLineChartScales>) =>
     line<PointDataType>()
@@ -18,7 +18,8 @@ export const drawLines = (
       .y((point) => scales.yScale(point.y));
 
   const lineGenerator = getLineGenerator(scales);
-  const lines = select(parentRef)
+  const lineGroup = select(parentRef).data([0]).append("g");
+  const lines = lineGroup
     .selectAll<SVGPathElement, LineDataType>(".pressure-lines")
     .data(data.lines, (dataLine) => dataLine.lineId)
     .join("path")
@@ -28,10 +29,10 @@ export const drawLines = (
     .attr("stroke-width", 1)
     .attr("transform", `translate(${padding.x.left}, ${padding.y.top})`);
 
-  const updateLines = (newScales: ReturnType<typeof getLineChartScales>) => {
-    const newLineGenerator = getLineGenerator(newScales);
+  const updateLines = () => {
+    const newLineGenerator = getLineGenerator(scales);
     lines.attr("d", (dataLine) => newLineGenerator(dataLine.points));
   };
 
-  return { lines: lines.node(), updateLines };
+  return { lines: lineGroup.node(), updateLines };
 };

@@ -23,7 +23,7 @@ export const clip = (
     .attr("width", size.width - padding.x.left - padding.x.right);
 
   elements.forEach((element) => {
-    select(element).attr("clip-path", clipId);
+    select(element).attr("clip-path", `url(#${clipId})`);
   });
 
   return;
