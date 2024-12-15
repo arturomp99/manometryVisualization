@@ -1,7 +1,9 @@
-import { BrushSelection, DSVRowArray } from "d3";
+import { BrushSelection } from "d3";
+
+import { JsonDataType } from "@/utils/jsonDataType";
 
 export type ChartProps = {
-  data: DSVRowArray<string> | undefined;
+  data: JsonDataType | undefined;
 };
 
 export type OverviewChartProps = {
