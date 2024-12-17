@@ -2,12 +2,13 @@ import { select, line } from "d3";
 import { LineDataType, MultiLineDataType, PointDataType } from "../sharedTypes";
 import type { Padding } from "../../sharedTypes";
 import { getLineChartScales } from "./getLineChartScales";
+import type { LineChartScalesType } from "./getLineChartScales";
 
 export const drawLines = (
   parentRef: SVGSVGElement,
   data: MultiLineDataType,
   padding: Padding,
-  scales: ReturnType<typeof getLineChartScales>
+  scales: LineChartScalesType
 ): {
   lines: SVGElement | null;
   updateLines: () => void;

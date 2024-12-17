@@ -4,10 +4,7 @@ import type { MultiLineDataType } from "./sharedTypes";
 import { useResizableRef } from "@/app/hooks";
 import type { DetailChartProps, Padding } from "../sharedTypes";
 import { BrushSelection } from "d3";
-import {
-  debouncedDrawLineChartDetails,
-  drawLineChartDetails,
-} from "./drawLineChart/drawLineChartDetails";
+import { drawLineChartDetails } from "./drawLineChart/drawLineChartDetails";
 
 interface LineChartDetailsProps extends DetailChartProps {
   data: MultiLineDataType;
@@ -39,6 +36,7 @@ export const LineChartDetails: FC<LineChartDetailsProps> = ({
     }, 500);
 
     return () => clearTimeout(onSizeChange);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [size]);
 
   useEffect(() => {

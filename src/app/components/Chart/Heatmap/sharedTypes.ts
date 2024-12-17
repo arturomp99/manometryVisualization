@@ -8,7 +8,8 @@ export type RowDataType = {
 };
 
 export type RectangleDataType = {
-  timestamp: number;
+  timestampInitial: number;
+  timestampFinal: number;
   sensor: string;
   pressure: number;
 };

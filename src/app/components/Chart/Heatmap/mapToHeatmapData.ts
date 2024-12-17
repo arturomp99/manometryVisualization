@@ -9,8 +9,13 @@ export const mapToHeatmapData = (
   }
   const rows: HeatmapDataType["rows"] = Object.entries(data).map(
     ([sensor, readings]) => {
-      const rectangles = Object.entries(readings).map(([timestamp, value]) => ({
-        timestamp: +timestamp,
+      const readingsArray = Object.entries(readings);
+      const rectangles = readingsArray.map(([timestamp, value], index) => ({
+        timestampInitial: +timestamp,
+        timestampFinal:
+          index < readingsArray.length - 1
+            ? +readingsArray[index + 1][0]
+            : +timestamp,
         sensor,
         pressure: +value,
       }));

@@ -28,7 +28,6 @@ export const addBrush = (
       onBrush(brushExtent);
     })
     .on("end", (brushEvent: D3BrushEvent<unknown>) => {
-      console.log("arturo brushEvent.selection", brushEvent.selection);
       if (brushEvent.selection === null) {
         onBrush(null);
       }

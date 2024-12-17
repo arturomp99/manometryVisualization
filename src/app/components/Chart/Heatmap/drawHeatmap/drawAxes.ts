@@ -1,24 +1,23 @@
 import { axisBottom, axisLeft, select } from "d3";
 import type { Padding, Size } from "../../sharedTypes";
-import { getLineChartScales } from "./getLineChartScales";
-import type { LineChartScalesType } from "./getLineChartScales";
+import type { HeatmapScalesType } from "./getHeatmapScales";
 
 export const drawAxes = (
   parentRef: SVGSVGElement,
-  scales: LineChartScalesType,
+  scales: HeatmapScalesType,
   dimensions: Size,
   padding: Padding
 ): ((newXAxisExtent: [number, number]) => {
-  newScales: LineChartScalesType;
+  newScales: HeatmapScalesType;
 }) => {
-  const { xScale, yScale } = scales;
+  const { xScale, yScale, colorScale } = scales;
   const initialDomain = xScale.domain();
 
   const xAxis = axisBottom(xScale);
   const yAxis = axisLeft(yScale);
 
   const xAxisG = select(parentRef)
-    .selectAll(".line-chart-x-axis")
+    .selectAll(".heatmap-x-axis")
     .data([0])
     .enter()
     .append("g")
@@ -26,7 +25,7 @@ export const drawAxes = (
     .call(xAxis)
     .attr(
       "transform",
-      `translate(${padding.x.left},${yScale(0) + padding.y.top})`
+      `translate(${padding.x.left},${dimensions.height - padding.y.bottom})`
     );
 
   select(parentRef)
@@ -40,10 +39,10 @@ export const drawAxes = (
 
   const updateAxes = (
     newXAxisExtent: [number, number] | null
-  ): { newScales: LineChartScalesType } => {
+  ): { newScales: HeatmapScalesType } => {
     const newXScale = xScale?.domain(newXAxisExtent ?? initialDomain);
     xAxisG.call(axisBottom(newXScale));
-    return { newScales: { xScale: newXScale, yScale } };
+    return { newScales: { xScale: newXScale, yScale, colorScale } };
   };
 
   return updateAxes;

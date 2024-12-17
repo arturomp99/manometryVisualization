@@ -1,6 +1,6 @@
-import { createRef, FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect } from "react";
 import type { MultiLineDataType } from "./sharedTypes";
-import type { OverviewChartProps, Padding, PartialSize } from "../sharedTypes";
+import type { OverviewChartProps, Padding } from "../sharedTypes";
 import { debouncedDrawLineChartOverview } from "./drawLineChart/drawLineChartOverview";
 import { useResizableRef } from "@/app/hooks";
 

@@ -10,7 +10,6 @@ import { drawAxes } from "./drawAxes";
 import { getLineChartScales } from "./getLineChartScales";
 import { drawLines } from "./drawLines";
 import { addBrush } from "@/app/d3Utils/addBrush";
-import { BrushSelection } from "d3";
 
 export const drawLineChartOverview = (
   parentRef: SVGSVGElement | null,
@@ -22,6 +21,7 @@ export const drawLineChartOverview = (
   if (!parentRef || !size.height || !size.width) {
     return;
   }
+
   const scales = getLineChartScales(data, size as Size, padding);
   drawLines(parentRef, data, padding, scales);
   addBrush(parentRef, scales.xScale, size as Size, padding, onBrush);

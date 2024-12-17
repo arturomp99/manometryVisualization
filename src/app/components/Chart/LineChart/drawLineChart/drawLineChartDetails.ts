@@ -15,9 +15,9 @@ export const drawLineChartDetails = (
   if (!parentRef || !size.height || !size.width) {
     return;
   }
+
   const scales = getLineChartScales(data, size as Size, padding);
   const { lines, updateLines } = drawLines(parentRef, data, padding, scales);
-  console.log("arturo lines", lines);
   const updateAxes = drawAxes(parentRef, scales, size as Size, padding);
   clip(parentRef, [lines], size as Size, padding);
 
