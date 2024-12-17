@@ -1,23 +1,23 @@
 import { debounce } from "lodash";
-import { OnBrushType, Padding, PartialSize, Size } from "../../sharedTypes";
-import { HeatmapDataType } from "../sharedTypes";
+import { addBrush } from "@/app/d3Utils/addBrush";
+import { DrawOverviewArgs, Size } from "../../sharedTypes";
 import { getHeatmapScales } from "./getHeatmapScales";
 import { drawAxes } from "./drawAxes";
 import { drawRectangles } from "./drawRectangles";
+import { HeatmapDataType } from "../sharedTypes";
 
 export const drawHeatmapOverview = (
-  parentRef: SVGSVGElement | null,
-  data: HeatmapDataType,
-  size: PartialSize,
-  padding: Padding,
-  onBrush: OnBrushType
+  args: DrawOverviewArgs<HeatmapDataType>
 ) => {
+  const { parentRef, data, size, padding, onBrush } = args;
+
   if (!parentRef || !size.height || !size.width) {
     return;
   }
 
   const scales = getHeatmapScales(data, size as Size, padding);
   drawRectangles(parentRef, data, padding, scales);
+  addBrush(parentRef, scales.xScale, size as Size, padding, onBrush);
   drawAxes(parentRef, scales, size as Size, padding);
 };
 

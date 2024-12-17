@@ -1,17 +1,16 @@
 import { debounce } from "lodash";
-import type { MultiLineDataType } from "../sharedTypes";
-import type { Padding, PartialSize, Size } from "../../sharedTypes";
+import type { DrawDetailsArgs, Size } from "../../sharedTypes";
 import { getLineChartScales } from "./getLineChartScales";
 import { drawLines } from "./drawLines";
 import { drawAxes } from "./drawAxes";
 import { clip } from "@/app/d3Utils";
+import { MultiLineDataType } from "../sharedTypes";
 
 export const drawLineChartDetails = (
-  parentRef: SVGSVGElement | null,
-  data: MultiLineDataType,
-  size: PartialSize,
-  padding: Padding
+  args: DrawDetailsArgs<MultiLineDataType>
 ): { onBrush: (brush: [number, number]) => void } | undefined => {
+  const { parentRef, data, size, padding } = args;
+
   if (!parentRef || !size.height || !size.width) {
     return;
   }

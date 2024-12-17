@@ -26,17 +26,17 @@ export const LineChartDetails: FC<LineChartDetailsProps> = ({
 
   useEffect(() => {
     const onSizeChange = setTimeout(() => {
-      const updateLineChart = drawLineChartDetails(
-        containerRef.current,
+      const updateLineChart = drawLineChartDetails({
+        parentRef: containerRef.current,
         data,
         size,
-        padding
-      );
+        padding,
+      });
       setBrushUpdate(() => updateLineChart?.onBrush);
     }, 500);
 
     return () => clearTimeout(onSizeChange);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [size]);
 
   useEffect(() => {

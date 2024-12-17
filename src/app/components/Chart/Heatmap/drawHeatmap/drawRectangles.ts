@@ -30,7 +30,7 @@ export const drawRectangles = (
       (dataRow) => `translate(0,${scales.yScale(dataRow.rowId)})`
     );
 
-  rows
+  const rectangles = rows
     .selectAll<SVGRectElement, RectangleDataType[]>(".rect-marker")
     .data((dataRow) => dataRow.rectangles)
     .join("rect")
@@ -45,7 +45,16 @@ export const drawRectangles = (
     .attr("height", scales.yScale.bandwidth())
     .attr("fill", (rectData) => scales.colorScale(rectData.pressure));
 
-  const updateRectangles = () => {};
+  const updateRectangles = () => {
+    rectangles
+      .attr("x", (rectData) => scales.xScale(rectData.timestampInitial))
+      .attr(
+        "width",
+        (rectData) =>
+          scales.xScale(rectData.timestampFinal) -
+          scales.xScale(rectData.timestampInitial)
+      );
+  };
 
   return { rectangles: rowsGroup.node(), updateRectangles };
 };

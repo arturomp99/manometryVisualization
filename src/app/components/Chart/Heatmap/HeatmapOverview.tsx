@@ -21,13 +21,13 @@ export const HeatmapOverview: FC<HeatmapOverviewProps> = ({
   const { containerRef, size } = useResizableRef<SVGSVGElement>();
 
   useEffect(() => {
-    debouncedDrawHeatmapOverview(
-      containerRef.current,
+    debouncedDrawHeatmapOverview({
+      parentRef: containerRef.current,
       data,
       size,
       padding,
-      onBrush
-    );
+      onBrush,
+    });
   }, [size]);
 
   return (

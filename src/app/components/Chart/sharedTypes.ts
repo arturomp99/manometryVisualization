@@ -1,6 +1,6 @@
-import { BrushSelection } from "d3";
+import type { BrushSelection } from "d3";
 
-import { JsonDataType } from "@/utils/jsonDataType";
+import type { JsonDataType } from "@/utils/jsonDataType";
 
 export type ChartProps = {
   data: JsonDataType | undefined;
@@ -30,3 +30,17 @@ export type Padding = {
 };
 
 export type OnBrushType = (brush: BrushSelection | null) => void;
+
+export type DrawOverviewArgs<DataType> = {
+  parentRef: SVGSVGElement | null;
+  data: DataType;
+  size: PartialSize;
+  padding: Padding;
+  onBrush: OnBrushType;
+};
+export type DrawDetailsArgs<DataType> = {
+  parentRef: SVGSVGElement | null;
+  data: DataType;
+  size: PartialSize;
+  padding: Padding;
+};
