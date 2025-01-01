@@ -14,6 +14,7 @@ import { useLineHover } from "./useLineHover";
 import { Spacer } from "@nextui-org/spacer";
 import { LineChartLegend } from "./LineChartLegend/LineChartLegend";
 import { DetailsContainer } from "../../Containers/DetailsContainer";
+import { useLegendClickEntry } from "./useLegendClickEntry";
 
 interface LineChartDetailsProps extends DetailChartProps {
   data: MultiLineDataType;
@@ -33,6 +34,9 @@ export const LineChartDetails: FC<LineChartDetailsProps> = ({
 }) => {
   const { containerRef, size } = useResizableRef<SVGSVGElement>();
   const { hoveredLine, onHover } = useLineHover();
+  const { selectedEntries, onLegendEntryClick } = useLegendClickEntry(
+    data.lines.map((dataLine) => dataLine.lineId)
+  );
 
   const [brushUpdate, setBrushUpdate] =
     useState<(brush: BrushSelection | null) => void>();
@@ -70,8 +74,9 @@ export const LineChartDetails: FC<LineChartDetailsProps> = ({
     if (!data) {
       return;
     }
-    redrawLines?.(data, hoveredLine);
-  }, [data, redrawLines, hoveredLine]);
+    const onBrush = redrawLines?.(data, hoveredLine, selectedEntries);
+    setBrushUpdate(() => onBrush);
+  }, [data, redrawLines, hoveredLine, selectedEntries]);
 
   return (
     <>
@@ -87,6 +92,8 @@ export const LineChartDetails: FC<LineChartDetailsProps> = ({
             colorScale={colorScale}
             onHover={onHover}
             hoveredEntryId={hoveredLine}
+            onClick={onLegendEntryClick}
+            selectedEntries={selectedEntries}
           />
         </>
       ) : null}

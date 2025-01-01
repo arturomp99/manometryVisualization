@@ -11,7 +11,8 @@ import { LineDataType, MultiLineDataType } from "../sharedTypes";
 
 export type RedrawLinesFunctionType = (
   data: MultiLineDataType,
-  hoveredLineId?: string
+  hoveredLineId?: string,
+  selectedEntries?: string[]
 ) => void;
 
 export const drawLineChartDetails = (
@@ -45,7 +46,18 @@ export const drawLineChartDetails = (
     updateLines();
   };
 
-  const redrawLines: RedrawLinesFunctionType = (data, hoveredLineId) => {
+  const redrawLines: RedrawLinesFunctionType = (
+    data,
+    hoveredLineId,
+    selectedEntries
+  ) => {
+    data.lines.forEach((dataLine) => {
+      const isSelected = selectedEntries?.find(
+        (selectedEntry) => dataLine.lineId === selectedEntry
+      );
+      dataLine.selected = !!isSelected;
+    });
+
     const hoveredLine = data.lines.find(
       (line) => line.lineId === hoveredLineId
     );
@@ -57,7 +69,22 @@ export const drawLineChartDetails = (
       prevHoveredLine.hovered = false;
     }
 
-    drawLines(parentRef, data, padding, scales);
+    const { updateLines: redrawnUpdateLines } = drawLines(
+      parentRef,
+      data,
+      padding,
+      scales
+    );
+    if (!!onHover) {
+      addHover(parentRef, ".pressure-lines-thicker", onHover);
+    }
+
+    const onBrush = (brushSelection: [number, number]) => {
+      updateAxes(brushSelection);
+      redrawnUpdateLines();
+    };
+
+    return onBrush;
   };
 
   return { onBrush, redrawLines };

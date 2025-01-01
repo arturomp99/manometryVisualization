@@ -4,6 +4,7 @@ type LineChartLegendEntryProps = {
   color: string;
   isDisabled: boolean;
   onHover: (key: string | undefined) => void;
+  onClick: (key: string) => void;
   entryText: string;
 };
 
@@ -11,6 +12,7 @@ export const LineChartLegendEntry: FC<LineChartLegendEntryProps> = ({
   color,
   isDisabled,
   onHover,
+  onClick,
   entryText,
 }) => {
   const disabledClass = "opacity-20";
@@ -22,6 +24,7 @@ export const LineChartLegendEntry: FC<LineChartLegendEntryProps> = ({
       }`}
       onMouseOver={() => onHover(entryText)}
       onMouseOut={() => onHover(undefined)}
+      onClick={() => onClick(entryText)}
     >
       <div className={`w-4 h-4`} style={{ backgroundColor: color }} />
       <span className="text-sm text-white">{entryText}</span>

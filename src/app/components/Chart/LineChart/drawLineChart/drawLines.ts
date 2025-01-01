@@ -14,6 +14,14 @@ export const drawLines = (
   updateLines: () => void;
 } => {
   const isAnyHovered = data.lines.some((line) => line.hovered);
+  const isAnySelected = data.lines.some((line) => line.selected);
+
+  const dataToDraw = {
+    ...data,
+    lines: isAnySelected
+      ? data.lines.filter((dataLine) => dataLine.selected)
+      : data.lines,
+  };
 
   const getLineGenerator = (scales: ReturnType<typeof getLineChartScales>) =>
     line<PointDataType>()
@@ -29,7 +37,7 @@ export const drawLines = (
 
   lineGroup
     .selectAll<SVGPathElement, LineDataType>(".pressure-lines-thicker")
-    .data(data.lines, (dataLine) => dataLine.lineId)
+    .data(dataToDraw.lines, (dataLine) => dataLine.lineId)
     .join(
       (enter) =>
         enter
@@ -46,7 +54,7 @@ export const drawLines = (
 
   const lines = lineGroup
     .selectAll<SVGPathElement, LineDataType>(".pressure-lines")
-    .data(data.lines, (dataLine) => dataLine.lineId)
+    .data(dataToDraw.lines, (dataLine) => dataLine.lineId)
     .join(
       (enter) =>
         enter
@@ -59,7 +67,7 @@ export const drawLines = (
           .attr("transform", `translate(${padding.x.left}, ${padding.y.top})`),
       (update) =>
         update.attr("opacity", (dataLine) =>
-          isAnyHovered ? (dataLine.hovered ? 1 : 0.2) : 1
+          !isAnySelected && isAnyHovered ? (dataLine.hovered ? 1 : 0.2) : 1
         ),
       (exit) => exit.remove()
     );

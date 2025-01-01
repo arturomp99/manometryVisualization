@@ -6,6 +6,7 @@ export type LineDataType = {
   points: PointDataType[];
   lineId: string;
   hovered: boolean;
+  selected: boolean;
 };
 
 export type PointDataType = {
