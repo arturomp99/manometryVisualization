@@ -6,11 +6,13 @@ import { drawAxes } from "./drawAxes";
 import { drawRectangles } from "./drawRectangles";
 import { getHeatmapScales } from "./getHeatmapScales";
 
-export const drawHeatmapDetails = (args: DrawDetailsArgs<HeatmapDataType>) => {
+export const drawHeatmapDetails = (
+  args: DrawDetailsArgs<HeatmapDataType, unknown>
+) => {
   const { parentRef, data, size, padding } = args;
 
   if (!parentRef || !size.height || !size.width) {
-    return;
+    return { onBrush: undefined, colorScale: undefined };
   }
 
   const scales = getHeatmapScales(data, size as Size, padding);
@@ -28,7 +30,7 @@ export const drawHeatmapDetails = (args: DrawDetailsArgs<HeatmapDataType>) => {
     updateRectangles();
   };
 
-  return { onBrush };
+  return { onBrush, colorScale: scales.colorScale };
 };
 
 export const debouncedDrawHeatmapDetails = debounce(drawHeatmapDetails, 500);

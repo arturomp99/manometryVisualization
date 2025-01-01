@@ -8,7 +8,7 @@ import { HeatmapOverview } from "./HeatmapOverview";
 import { DetailsContainer } from "../../Containers/DetailsContainer";
 import { HeatmapDetails } from "./HeatmapDetails";
 import { mapToHeatmapData } from "./mapToHeatmapData";
-import { HeatmapLegend } from "./HeatmapLegend";
+import { HeatmapLegend } from "./HeatmapLegend/HeatmapLegend";
 
 export const Heatmap: FC<ChartProps> = ({ data }) => {
   const heatmapData = useMemo(() => mapToHeatmapData(data), [data]);
@@ -21,19 +21,13 @@ export const Heatmap: FC<ChartProps> = ({ data }) => {
     <>
       <ChartSettings />
       <Spacer y={2} />
-      <OverviewContainer>
-        {!!heatmapData ? (
-          <HeatmapOverview data={heatmapData} onBrush={onBrush} />
-        ) : null}
-      </OverviewContainer>
+      {!!heatmapData ? (
+        <HeatmapOverview data={heatmapData} onBrush={onBrush} />
+      ) : null}
       <Spacer y={2} />
-      <DetailsContainer>
-        {!!heatmapData ? (
-          <HeatmapDetails data={heatmapData} brush={brushSelection} />
-        ) : null}
-      </DetailsContainer>
-      <Spacer y={2} />
-      <HeatmapLegend />
+      {!!heatmapData ? (
+        <HeatmapDetails data={heatmapData} brush={brushSelection} addLegend />
+      ) : null}
     </>
   );
 };

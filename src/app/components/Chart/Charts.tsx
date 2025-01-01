@@ -22,7 +22,7 @@ export const Charts = () => {
       radius="none"
       color="primary"
       variant="bordered"
-      defaultSelectedKey={"lineChart"}
+      defaultSelectedKey={"heatmap"}
     >
       <Tab key="heatmap" title="Heatmap">
         <Heatmap data={data} />
