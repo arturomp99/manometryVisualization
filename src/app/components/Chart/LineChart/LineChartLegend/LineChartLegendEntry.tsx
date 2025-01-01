@@ -13,7 +13,7 @@ export const LineChartLegendEntry: FC<LineChartLegendEntryProps> = ({
   onHover,
   entryText,
 }) => {
-  const disabledClass = "opacity-50";
+  const disabledClass = "opacity-20";
 
   return (
     <li

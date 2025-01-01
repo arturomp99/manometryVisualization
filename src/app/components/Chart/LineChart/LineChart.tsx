@@ -24,26 +24,22 @@ export const LineChart: FC<ChartProps> = ({ data }) => {
     <>
       <ChartSettings />
       <Spacer y={2} />
-      <OverviewContainer>
-        {!!lineChartData ? (
-          <LineChartOverview
-            data={lineChartData}
-            onBrush={onBrush}
-            colorScale={colorScale}
-          />
-        ) : null}
-      </OverviewContainer>
+      {!!lineChartData ? (
+        <LineChartOverview
+          data={lineChartData}
+          onBrush={onBrush}
+          colorScale={colorScale}
+        />
+      ) : null}
       <Spacer y={2} />
-      <DetailsContainer>
-        {!!lineChartData ? (
-          <LineChartDetails
-            data={lineChartData}
-            brush={brushSelection}
-            colorScale={colorScale}
-            addLegend
-          />
-        ) : null}
-      </DetailsContainer>
+      {!!lineChartData ? (
+        <LineChartDetails
+          data={lineChartData}
+          brush={brushSelection}
+          colorScale={colorScale}
+          addLegend
+        />
+      ) : null}
     </>
   );
 };

@@ -59,7 +59,7 @@ export const drawLines = (
           .attr("transform", `translate(${padding.x.left}, ${padding.y.top})`),
       (update) =>
         update.attr("opacity", (dataLine) =>
-          isAnyHovered ? (dataLine.hovered ? 1 : 0.5) : 1
+          isAnyHovered ? (dataLine.hovered ? 1 : 0.2) : 1
         ),
       (exit) => exit.remove()
     );

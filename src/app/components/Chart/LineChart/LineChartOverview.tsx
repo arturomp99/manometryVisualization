@@ -4,6 +4,7 @@ import type { MultiLineDataType } from "./sharedTypes";
 import type { OverviewChartProps, Padding } from "../sharedTypes";
 import { debouncedDrawLineChartOverview } from "./drawLineChart/drawLineChartOverview";
 import { useResizableRef } from "@/app/hooks";
+import { OverviewContainer } from "../../Containers/OverviewContainer";
 
 interface LineChartOverviewProps extends OverviewChartProps {
   data: MultiLineDataType;
@@ -38,8 +39,8 @@ export const LineChartOverview: FC<LineChartOverviewProps> = ({
   );
 
   return (
-    <div className="w-full h-full">
+    <OverviewContainer>
       <svg className="w-full h-full" ref={containerRef} />
-    </div>
+    </OverviewContainer>
   );
 };

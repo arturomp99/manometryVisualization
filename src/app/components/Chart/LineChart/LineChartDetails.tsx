@@ -13,6 +13,7 @@ import {
 import { useLineHover } from "./useLineHover";
 import { Spacer } from "@nextui-org/spacer";
 import { LineChartLegend } from "./LineChartLegend/LineChartLegend";
+import { DetailsContainer } from "../../Containers/DetailsContainer";
 
 interface LineChartDetailsProps extends DetailChartProps {
   data: MultiLineDataType;
@@ -74,9 +75,9 @@ export const LineChartDetails: FC<LineChartDetailsProps> = ({
 
   return (
     <>
-      <div className="w-full h-full">
+      <DetailsContainer>
         <svg className="w-full h-full" ref={containerRef} />
-      </div>
+      </DetailsContainer>
 
       {addLegend ? (
         <>
@@ -84,7 +85,8 @@ export const LineChartDetails: FC<LineChartDetailsProps> = ({
           <LineChartLegend
             keys={data?.lines.map((line) => line.lineId)}
             colorScale={colorScale}
-            onHover={() => {}}
+            onHover={onHover}
+            hoveredEntryId={hoveredLine}
           />
         </>
       ) : null}
