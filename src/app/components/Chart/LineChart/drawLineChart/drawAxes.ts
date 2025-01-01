@@ -1,6 +1,5 @@
 import { axisBottom, axisLeft, select } from "d3";
 import type { Padding, Size } from "../../sharedTypes";
-import { getLineChartScales } from "./getLineChartScales";
 import type { LineChartScalesType } from "./getLineChartScales";
 
 export const drawAxes = (

@@ -1,4 +1,5 @@
 import { FC, useEffect } from "react";
+import type { ScaleOrdinal } from "d3";
 import type { MultiLineDataType } from "./sharedTypes";
 import type { OverviewChartProps, Padding } from "../sharedTypes";
 import { debouncedDrawLineChartOverview } from "./drawLineChart/drawLineChartOverview";
@@ -6,6 +7,7 @@ import { useResizableRef } from "@/app/hooks";
 
 interface LineChartOverviewProps extends OverviewChartProps {
   data: MultiLineDataType;
+  colorScale: ScaleOrdinal<string, string, never>;
 }
 
 const padding: Padding = {
@@ -16,18 +18,22 @@ const padding: Padding = {
 export const LineChartOverview: FC<LineChartOverviewProps> = ({
   data,
   onBrush,
+  colorScale,
 }) => {
   const { containerRef, size } = useResizableRef<SVGSVGElement>();
 
   useEffect(
     () =>
-      debouncedDrawLineChartOverview({
-        parentRef: containerRef.current,
-        data,
-        size,
-        padding,
-        onBrush,
-      }),
+      debouncedDrawLineChartOverview(
+        {
+          parentRef: containerRef.current,
+          data,
+          size,
+          padding,
+          onBrush,
+        },
+        colorScale
+      ),
     [size]
   );
 

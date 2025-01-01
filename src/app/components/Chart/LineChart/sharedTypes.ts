@@ -5,6 +5,7 @@ export type MultiLineDataType = {
 export type LineDataType = {
   points: PointDataType[];
   lineId: string;
+  hovered: boolean;
 };
 
 export type PointDataType = {

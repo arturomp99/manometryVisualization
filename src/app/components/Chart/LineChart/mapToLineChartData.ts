@@ -18,6 +18,7 @@ export const mapToLineChartData = (
       return {
         points,
         lineId: sensor,
+        hovered: false,
       };
     }
   );

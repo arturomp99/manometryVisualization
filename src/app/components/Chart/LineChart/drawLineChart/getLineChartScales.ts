@@ -1,18 +1,19 @@
 import { extent, scaleLinear } from "d3";
-import type { ScaleLinear } from "d3";
+import type { ScaleLinear, ScaleOrdinal } from "d3";
 import type { Padding, Size } from "../../sharedTypes";
 import type { MultiLineDataType } from "../sharedTypes";
 
 export type LineChartScalesType = {
   xScale: ScaleLinear<number, number, never>;
   yScale: ScaleLinear<number, number, never>;
+  colorScale: ScaleOrdinal<string, string, never>;
 };
 
 export const getLineChartScales = (
   data: MultiLineDataType,
   dimensions: Size,
   padding: Padding
-): LineChartScalesType => {
+): Pick<LineChartScalesType, "xScale" | "yScale"> => {
   const xExtent = extent(
     data.lines.flatMap((line) => line.points.map((point) => point.x))
   ) as [number, number];

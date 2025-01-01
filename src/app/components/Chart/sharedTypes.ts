@@ -12,6 +12,7 @@ export type OverviewChartProps = {
 
 export type DetailChartProps = {
   brush: BrushSelection | null | undefined;
+  addLegend?: boolean;
 };
 
 export type PartialSize = {
@@ -38,9 +39,10 @@ export type DrawOverviewArgs<DataType> = {
   padding: Padding;
   onBrush: OnBrushType;
 };
-export type DrawDetailsArgs<DataType> = {
+export type DrawDetailsArgs<DataType, HoveredDataType> = {
   parentRef: SVGSVGElement | null;
   data: DataType;
   size: PartialSize;
   padding: Padding;
+  onHover?: (data: HoveredDataType | null) => void;
 };

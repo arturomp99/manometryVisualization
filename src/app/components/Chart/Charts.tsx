@@ -1,9 +1,17 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { Tab, Tabs } from "@nextui-org/tabs";
-import { Heatmap } from "./Heatmap/Heatmap";
-import { LineChart } from "./LineChart/LineChart";
+
 import { useGetChartData } from "@/app/hooks";
+
+const Heatmap = dynamic(() =>
+  import("./Heatmap/Heatmap").then((module) => module.Heatmap)
+);
+
+const LineChart = dynamic(() =>
+  import("./LineChart/LineChart").then((module) => module.LineChart)
+);
 
 export const Charts = () => {
   const { data } = useGetChartData();
@@ -14,7 +22,7 @@ export const Charts = () => {
       radius="none"
       color="primary"
       variant="bordered"
-      defaultSelectedKey={"heatmap"}
+      defaultSelectedKey={"lineChart"}
     >
       <Tab key="heatmap" title="Heatmap">
         <Heatmap data={data} />

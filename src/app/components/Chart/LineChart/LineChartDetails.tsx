@@ -1,13 +1,22 @@
 import { useEffect, useState } from "react";
 import type { FC } from "react";
-import type { MultiLineDataType } from "./sharedTypes";
+import type { BrushSelection, ScaleOrdinal } from "d3";
+
 import { useResizableRef } from "@/app/hooks";
+
+import type { MultiLineDataType } from "./sharedTypes";
 import type { DetailChartProps, Padding } from "../sharedTypes";
-import { BrushSelection } from "d3";
-import { drawLineChartDetails } from "./drawLineChart/drawLineChartDetails";
+import {
+  drawLineChartDetails,
+  RedrawLinesFunctionType,
+} from "./drawLineChart/drawLineChartDetails";
+import { useLineHover } from "./useLineHover";
+import { Spacer } from "@nextui-org/spacer";
+import { LineChartLegend } from "./LineChartLegend/LineChartLegend";
 
 interface LineChartDetailsProps extends DetailChartProps {
   data: MultiLineDataType;
+  colorScale: ScaleOrdinal<string, string, never>;
 }
 
 const padding: Padding = {
@@ -17,22 +26,32 @@ const padding: Padding = {
 
 export const LineChartDetails: FC<LineChartDetailsProps> = ({
   data,
+  addLegend,
   brush,
+  colorScale,
 }) => {
   const { containerRef, size } = useResizableRef<SVGSVGElement>();
+  const { hoveredLine, onHover } = useLineHover();
 
   const [brushUpdate, setBrushUpdate] =
     useState<(brush: BrushSelection | null) => void>();
 
+  const [redrawLines, setRedrawLines] = useState<RedrawLinesFunctionType>();
+
   useEffect(() => {
     const onSizeChange = setTimeout(() => {
-      const updateLineChart = drawLineChartDetails({
-        parentRef: containerRef.current,
-        data,
-        size,
-        padding,
-      });
+      const updateLineChart = drawLineChartDetails(
+        {
+          parentRef: containerRef.current,
+          data,
+          size,
+          padding,
+          onHover,
+        },
+        colorScale
+      );
       setBrushUpdate(() => updateLineChart?.onBrush);
+      setRedrawLines(() => updateLineChart?.redrawLines);
     }, 500);
 
     return () => clearTimeout(onSizeChange);
@@ -46,9 +65,29 @@ export const LineChartDetails: FC<LineChartDetailsProps> = ({
     brushUpdate?.(brush);
   }, [brush, brushUpdate]);
 
+  useEffect(() => {
+    if (!data) {
+      return;
+    }
+    redrawLines?.(data, hoveredLine);
+  }, [data, redrawLines, hoveredLine]);
+
   return (
-    <div className="w-full h-full">
-      <svg className="w-full h-full" ref={containerRef} />
-    </div>
+    <>
+      <div className="w-full h-full">
+        <svg className="w-full h-full" ref={containerRef} />
+      </div>
+
+      {addLegend ? (
+        <>
+          <Spacer y={2} />
+          <LineChartLegend
+            keys={data?.lines.map((line) => line.lineId)}
+            colorScale={colorScale}
+            onHover={() => {}}
+          />
+        </>
+      ) : null}
+    </>
   );
 };
