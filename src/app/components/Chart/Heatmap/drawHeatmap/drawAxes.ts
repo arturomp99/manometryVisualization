@@ -14,7 +14,9 @@ export const drawAxes = (
   const initialDomain = xScale.domain();
 
   const xAxis = axisBottom(xScale);
-  const yAxis = axisLeft(yScale);
+  const yAxis = axisLeft(yScale).tickValues(
+    yScale.domain().filter((_, index) => index % 3 == 0)
+  );
 
   const xAxisG = select(parentRef)
     .selectAll(".heatmap-x-axis")

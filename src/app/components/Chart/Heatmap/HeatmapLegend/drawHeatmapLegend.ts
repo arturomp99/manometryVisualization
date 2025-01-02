@@ -1,7 +1,12 @@
 import { debounce } from "lodash";
-import { range, select } from "d3";
+import { axisBottom, range, scaleLinear, select } from "d3";
 import type { HeatmapScalesType } from "../drawHeatmap/getHeatmapScales";
-import type { PartialSize } from "../../sharedTypes";
+import type { Padding, PartialSize } from "../../sharedTypes";
+
+const padding: Padding = {
+  x: { left: 16, right: 16 },
+  y: { top: 0, bottom: 16 },
+};
 
 const drawHeatmapLegend = (
   parentRef: SVGSVGElement | null,
@@ -42,9 +47,26 @@ const drawHeatmapLegend = (
     .selectAll("rect")
     .data([0])
     .join("rect")
-    .attr("height", size.height)
-    .attr("width", size.width)
+    .attr("height", size.height - padding.y.bottom - padding.y.top)
+    .attr("width", size.width - padding.x.left - padding.x.right)
+    .attr("transform", `translate(${padding.x.left}, ${padding.y.top})`)
     .attr("fill", "url(#gradient)");
+
+  const colorAxis = axisBottom<number>(
+    scaleLinear()
+      .domain(colorScale.domain())
+      .range([0, size.width - padding.x.left - padding.x.right])
+  );
+  select(parentRef)
+    .selectAll<SVGGElement, never>(".color-scale-axis")
+    .data([0])
+    .join("g")
+    .attr("class", "color-scale-axis")
+    .call(colorAxis)
+    .attr(
+      "transform",
+      `translate(${padding.x.left},${size.height - padding.y.bottom})`
+    );
 };
 
 export const debouncedDrawHeatmapLegend = debounce(drawHeatmapLegend, 500);
