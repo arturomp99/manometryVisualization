@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import type { FC } from "react";
-import type { BrushSelection, ScaleSequential } from "d3";
-import { debounce } from "lodash";
+import type { BrushSelection } from "d3";
 import { Spacer } from "@nextui-org/spacer";
 
 import { useResizableRef } from "@/app/hooks";

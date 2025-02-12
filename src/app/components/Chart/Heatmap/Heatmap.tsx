@@ -1,6 +1,5 @@
 import { FC, useMemo, useState } from "react";
 import { BrushSelection } from "d3";
-import { ChartSettings } from "../ChartSettings/ChartSettings";
 import { ChartProps, OnBrushType } from "../sharedTypes";
 import { Spacer } from "@nextui-org/spacer";
 import { HeatmapOverview } from "./HeatmapOverview";
@@ -16,7 +15,6 @@ export const Heatmap: FC<ChartProps> = ({ data }) => {
 
   return (
     <>
-      <ChartSettings />
       <Spacer y={2} />
       {!!heatmapData ? (
         <HeatmapOverview data={heatmapData} onBrush={onBrush} />

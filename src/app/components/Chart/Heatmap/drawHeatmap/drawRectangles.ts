@@ -14,7 +14,7 @@ export const drawRectangles = (
   scales: HeatmapScalesType
 ): {
   rectangles: SVGElement | null;
-  updateRectangles: (highlighRange?: [number, number] | null) => void;
+  updateRectangles: (highlighRange?: BrushSelection | null) => void;
   highlightRectangles: (highlighRange: [number, number] | null) => void;
 } => {
   const rowsGroup = select(parentRef)

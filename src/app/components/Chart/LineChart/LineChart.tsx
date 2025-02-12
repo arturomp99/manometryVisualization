@@ -1,7 +1,6 @@
 import { useMemo, useState } from "react";
 import type { FC } from "react";
 import type { BrushSelection } from "d3";
-import { ChartSettings } from "../ChartSettings/ChartSettings";
 import { LineChartOverview } from "./LineChartOverview";
 import { ChartProps, OnBrushType } from "../sharedTypes";
 import { Spacer } from "@nextui-org/spacer";
@@ -19,7 +18,6 @@ export const LineChart: FC<ChartProps> = ({ data }) => {
 
   return (
     <>
-      <ChartSettings />
       <Spacer y={2} />
       {!!lineChartData ? (
         <LineChartOverview
