@@ -1,4 +1,4 @@
-import { axisBottom, axisLeft, select } from "d3";
+import { axisBottom, axisLeft, BrushSelection, select } from "d3";
 import type { Padding, Size } from "../../sharedTypes";
 import type { HeatmapScalesType } from "./getHeatmapScales";
 
@@ -7,7 +7,7 @@ export const drawAxes = (
   scales: HeatmapScalesType,
   dimensions: Size,
   padding: Padding
-): ((newXAxisExtent: [number, number]) => {
+): ((newXAxisExtent: BrushSelection | null) => {
   newScales: HeatmapScalesType;
 }) => {
   const { xScale, yScale, colorScale } = scales;
@@ -40,9 +40,11 @@ export const drawAxes = (
     .attr("transform", `translate(${padding.x.left}, ${padding.y.top})`);
 
   const updateAxes = (
-    newXAxisExtent: [number, number] | null
+    newXAxisExtent: BrushSelection | null
   ): { newScales: HeatmapScalesType } => {
-    const newXScale = xScale?.domain(newXAxisExtent ?? initialDomain);
+    const newXScale = xScale?.domain(
+      (newXAxisExtent ?? initialDomain) as [number, number]
+    );
     xAxisG.call(axisBottom(newXScale));
     return { newScales: { xScale: newXScale, yScale, colorScale } };
   };

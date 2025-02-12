@@ -1,4 +1,4 @@
-import { select } from "d3";
+import { BrushSelection, select } from "d3";
 import type { Padding } from "../../sharedTypes";
 import type { HeatmapScalesType } from "./getHeatmapScales";
 import type {
@@ -14,7 +14,8 @@ export const drawRectangles = (
   scales: HeatmapScalesType
 ): {
   rectangles: SVGElement | null;
-  updateRectangles: () => void;
+  updateRectangles: (highlighRange?: [number, number] | null) => void;
+  highlightRectangles: (highlighRange: [number, number] | null) => void;
 } => {
   const rowsGroup = select(parentRef)
     .data([0])
@@ -45,7 +46,7 @@ export const drawRectangles = (
     .attr("height", scales.yScale.bandwidth())
     .attr("fill", (rectData) => scales.colorScale(rectData.pressure));
 
-  const updateRectangles = () => {
+  const updateRectangles = (highlighRange?: BrushSelection | null) => {
     rectangles
       .attr("x", (rectData) => scales.xScale(rectData.timestampInitial))
       .attr(
@@ -53,8 +54,31 @@ export const drawRectangles = (
         (rectData) =>
           scales.xScale(rectData.timestampFinal) -
           scales.xScale(rectData.timestampInitial)
+      )
+      .attr("fill-opacity", (rectData) =>
+        !!highlighRange
+          ? rectData.pressure >= (highlighRange[0] as number) &&
+            rectData.pressure <= (highlighRange[1] as number)
+            ? 1
+            : 0.2
+          : 1
       );
   };
 
-  return { rectangles: rowsGroup.node(), updateRectangles };
+  const highlightRectangles = (highlighRange: [number, number] | null) => {
+    rectangles.attr("fill-opacity", (rectData) =>
+      !!highlighRange
+        ? rectData.pressure >= highlighRange[0] &&
+          rectData.pressure <= highlighRange[1]
+          ? 1
+          : 0.2
+        : 1
+    );
+  };
+
+  return {
+    rectangles: rowsGroup.node(),
+    updateRectangles,
+    highlightRectangles,
+  };
 };

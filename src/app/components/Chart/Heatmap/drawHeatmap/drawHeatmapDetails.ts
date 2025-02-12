@@ -5,6 +5,7 @@ import type { HeatmapDataType } from "../sharedTypes";
 import { drawAxes } from "./drawAxes";
 import { drawRectangles } from "./drawRectangles";
 import { getHeatmapScales } from "./getHeatmapScales";
+import { BrushSelection } from "d3";
 
 export const drawHeatmapDetails = (
   args: DrawDetailsArgs<HeatmapDataType, unknown>
@@ -16,21 +17,31 @@ export const drawHeatmapDetails = (
   }
 
   const scales = getHeatmapScales(data, size as Size, padding);
-  const { rectangles, updateRectangles } = drawRectangles(
+  const { rectangles, updateRectangles, highlightRectangles } = drawRectangles(
     parentRef,
     data,
     padding,
     scales
   );
   const updateAxes = drawAxes(parentRef, scales, size as Size, padding);
-  clip(parentRef, [rectangles], size as Size, padding);
+  clip(parentRef, [rectangles], size as Size, {
+    x: { left: 0, right: 0 },
+    y: { top: 0, bottom: 0 },
+  });
 
-  const onBrush = (brushSelection: [number, number]) => {
+  const onBrush = (
+    brushSelection: BrushSelection | null,
+    legendBrushSelection?: BrushSelection | null
+  ) => {
     updateAxes(brushSelection);
-    updateRectangles();
+    updateRectangles(legendBrushSelection);
   };
 
-  return { onBrush, colorScale: scales.colorScale };
+  return {
+    onBrush,
+    onLegendBrush: highlightRectangles,
+    colorScale: scales.colorScale,
+  };
 };
 
 export const debouncedDrawHeatmapDetails = debounce(drawHeatmapDetails, 500);

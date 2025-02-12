@@ -1,7 +1,13 @@
 import { debounce } from "lodash";
 import { axisBottom, range, scaleLinear, select } from "d3";
 import type { HeatmapScalesType } from "../drawHeatmap/getHeatmapScales";
-import type { Padding, PartialSize } from "../../sharedTypes";
+import type {
+  OnBrushType,
+  Padding,
+  PartialSize,
+  Size,
+} from "../../sharedTypes";
+import { addBrush } from "@/app/d3Utils/addBrush";
 
 const padding: Padding = {
   x: { left: 16, right: 16 },
@@ -11,7 +17,8 @@ const padding: Padding = {
 const drawHeatmapLegend = (
   parentRef: SVGSVGElement | null,
   size: PartialSize,
-  colorScale: HeatmapScalesType["colorScale"] | undefined
+  colorScale: HeatmapScalesType["colorScale"] | undefined,
+  onBrush: OnBrushType
 ) => {
   if (!parentRef || !size.height || !size.width || !colorScale) {
     return;
@@ -52,11 +59,13 @@ const drawHeatmapLegend = (
     .attr("transform", `translate(${padding.x.left}, ${padding.y.top})`)
     .attr("fill", "url(#gradient)");
 
-  const colorAxis = axisBottom<number>(
-    scaleLinear()
-      .domain(colorScale.domain())
-      .range([0, size.width - padding.x.left - padding.x.right])
-  );
+  const colorLinearScale = scaleLinear()
+    .domain(colorRange)
+    .range([0, size.width - padding.x.left - padding.x.right]);
+  const colorAxis = axisBottom<number>(colorLinearScale);
+
+  addBrush(parentRef, colorLinearScale, size as Size, padding, onBrush);
+
   select(parentRef)
     .selectAll<SVGGElement, never>(".color-scale-axis")
     .data([0])

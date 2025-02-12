@@ -2,13 +2,10 @@ import { useMemo, useState } from "react";
 import type { FC } from "react";
 import type { BrushSelection } from "d3";
 import { ChartSettings } from "../ChartSettings/ChartSettings";
-import { LineChartLegend } from "./LineChartLegend/LineChartLegend";
 import { LineChartOverview } from "./LineChartOverview";
 import { ChartProps, OnBrushType } from "../sharedTypes";
 import { Spacer } from "@nextui-org/spacer";
 import { mapToLineChartData } from "./mapToLineChartData";
-import { OverviewContainer } from "../../Containers/OverviewContainer";
-import { DetailsContainer } from "../../Containers/DetailsContainer";
 import { LineChartDetails } from "./LineChartDetails";
 import { getLineChartColorScale } from "./drawLineChart/getLineChartColorScale";
 

@@ -21,11 +21,11 @@ export const addBrush = (
       if (!brushSelection) {
         return;
       }
-      const brushExtent: [number, number] = [
-        xScale.invert(brushSelection[0] as number),
-        xScale.invert(brushSelection[1] as number),
+      const brushSelectionExtent: [number, number] = [
+        xScale.invert((brushSelection[0] as number) - padding.x.left),
+        xScale.invert((brushSelection[1] as number) - padding.x.left),
       ];
-      onBrush(brushExtent);
+      onBrush(brushSelectionExtent);
     })
     .on("end", (brushEvent: D3BrushEvent<unknown>) => {
       if (brushEvent.selection === null) {

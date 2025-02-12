@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
 import type { FC } from "react";
 import type { BrushSelection, ScaleSequential } from "d3";
+import { debounce } from "lodash";
 import { Spacer } from "@nextui-org/spacer";
 
 import { useResizableRef } from "@/app/hooks";
 
-import type { DetailChartProps, Padding } from "../sharedTypes";
+import type { DetailChartProps, OnBrushType, Padding } from "../sharedTypes";
 import type { HeatmapDataType } from "./sharedTypes";
 import { drawHeatmapDetails } from "./drawHeatmap/drawHeatmapDetails";
 import { HeatmapLegend } from "./HeatmapLegend/HeatmapLegend";
 import { DetailsContainer } from "../../Containers/DetailsContainer";
+import { HeatmapScalesType } from "./drawHeatmap/getHeatmapScales";
 
 interface HeatmapDetailsProps extends DetailChartProps {
   data: HeatmapDataType;
@@ -28,19 +30,28 @@ export const HeatmapDetails: FC<HeatmapDetailsProps> = ({
   const { containerRef, size } = useResizableRef<SVGSVGElement>();
 
   const [brushUpdate, setBrushUpdate] =
-    useState<(brush: BrushSelection | null) => void>();
+    useState<ReturnType<typeof drawHeatmapDetails>["onBrush"]>();
   const [colorScale, setColorScale] =
-    useState<ScaleSequential<string, never>>();
+    useState<HeatmapScalesType["colorScale"]>();
+
+  const [legendBrush, setLegendBrush] = useState<BrushSelection | null>(null);
+  const [onLegendBrush, setOnLegendBrush] = useState<OnBrushType>(() => {});
 
   useEffect(() => {
     const onSizeChange = setTimeout(() => {
-      const { onBrush, colorScale } = drawHeatmapDetails({
+      const {
+        onBrush,
+        onLegendBrush: heatmapLegendBrushCallback,
+        colorScale,
+      } = drawHeatmapDetails({
         parentRef: containerRef.current,
         data,
         size,
         padding,
       });
+
       setBrushUpdate(() => onBrush);
+      setOnLegendBrush(() => heatmapLegendBrushCallback);
       setColorScale(() => colorScale);
     }, 500);
 
@@ -52,8 +63,13 @@ export const HeatmapDetails: FC<HeatmapDetailsProps> = ({
     if (brush === undefined) {
       return;
     }
-    brushUpdate?.(brush);
+    brushUpdate?.(brush, legendBrush);
   }, [brush, brushUpdate]);
+
+  useEffect(() => {
+    onLegendBrush?.(legendBrush);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [legendBrush]);
 
   return (
     <>
@@ -63,7 +79,7 @@ export const HeatmapDetails: FC<HeatmapDetailsProps> = ({
       {addLegend ? (
         <>
           <Spacer y={2} />
-          <HeatmapLegend colorScale={colorScale} />
+          <HeatmapLegend colorScale={colorScale} onBrush={setLegendBrush} />
         </>
       ) : null}
     </>
