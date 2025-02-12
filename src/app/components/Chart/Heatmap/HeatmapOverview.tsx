@@ -11,7 +11,7 @@ interface HeatmapOverviewProps extends OverviewChartProps {
 }
 
 const padding: Padding = {
-  x: { left: 24, right: 0 },
+  x: { left: 32, right: 0 },
   y: { top: 8, bottom: 16 },
 };
 
